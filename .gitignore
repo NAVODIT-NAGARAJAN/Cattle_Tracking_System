@@ -1,0 +1,119 @@
+# ==========================================
+# Dependencies
+# ==========================================
+node_modules/
+*/node_modules/
+jspm_packages/
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+!.env.example
+!*.env.example
+
+# ==========================================
+# Production & Build Outputs
+# ==========================================
+dist/
+dist-ssr/
+build/
+out/
+*.tsbuildinfo
+
+# ==========================================
+# Logs & Debug Output
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==========================================
+# Uploads & Runtime Generated Files
+# ==========================================
+uploads/*
+!uploads/.gitkeep
+backend/uploads/detections/*
+!backend/uploads/detections/.gitkeep
+# Test-generated image outputs in backend root
+backend/black.jpg
+backend/brown.jpg
+backend/red.jpg
+backend/red2.jpg
+backend/white.jpg
+
+# ==========================================
+# Database & Storage
+# ==========================================
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# ==========================================
+# Test Coverage & Tooling
+# ==========================================
+coverage/
+.nyc_output/
+*.lcov
+
+# ==========================================
+# Python & Machine Learning
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter & Pytest
+.ipynb_checkpoints/
+.pytest_cache/
+
+# ==========================================
+# IDE & Editor Configurations
+# ==========================================
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==========================================
+# Operating System Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Scratch & Temporary Folders
+# ==========================================
+scratch/

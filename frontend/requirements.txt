@@ -1,0 +1,540 @@
+PROJECT
+IoT Based Cattle Tracking and Breed Recognition System for National Livestock Management.
+
+SCOPE
+Build COMPLETE FRONTEND ONLY in:
+C:\IOT\frontend
+
+IMPORTANT
+- Do NOT modify C:\IOT\backend.
+- Do NOT integrate backend APIs yet.
+- Do NOT use Axios API calls yet.
+- Do NOT use Socket.IO yet.
+- Do NOT connect MongoDB.
+- Do NOT create Python/ML code.
+- Use realistic LOCAL MOCK DATA only.
+- Frontend must be fully completed, polished and production-level BEFORE backend integration.
+- Existing backend integration will be a separate Phase 2.
+
+STACK
+React + Vite
+JavaScript/JSX
+React Router
+CSS
+Use already-installed packages where possible.
+
+DESIGN GOAL
+Create a production-quality livestock management web application suitable for:
+- national livestock management
+- field workers
+- administrators
+- hackathon demonstration
+- real-world deployment concept
+
+UI must be:
+- professional
+- modern
+- clean
+- responsive
+- accessible
+- consistent
+- visually polished
+- desktop/tablet/mobile ready
+- not a basic template
+- no unfinished sections
+- no placeholder lorem ipsum
+- no broken layouts
+- no console errors
+
+APP STRUCTURE
+
+src/
+├── components/
+├── pages/
+├── layouts/
+├── data/
+├── hooks/
+├── context/
+├── utils/
+├── assets/
+├── App.jsx
+├── main.jsx
+└── index.css
+
+PAGES
+
+1. LOGIN
+- professional login screen
+- email
+- password
+- remember me
+- show/hide password
+- validation
+- loading state
+- error state
+- demo login option using mock authentication
+
+2. DASHBOARD
+Header:
+- application name
+- notification icon
+- user profile
+- current date/time
+
+Sidebar:
+- Dashboard
+- Animals
+- Live Tracking
+- Breed Detection
+- Detection History
+- Devices
+- Reports
+- Settings
+- Logout
+
+Dashboard cards:
+- Total Animals
+- Online Animals
+- GPS Fixed
+- Today's Detections
+- Active Devices
+- Alerts
+
+Dashboard sections:
+- animal population summary
+- breed distribution
+- recent detections
+- live animal status
+- GPS tracking overview
+- device status
+- alerts/activity
+
+Use charts where useful.
+Charts must have clear labels and legends.
+
+3. ANIMALS
+Production-level animal management screen.
+
+Features:
+- search
+- filter by breed
+- filter by status
+- filter by district
+- pagination
+- sorting
+- refresh
+- add animal button
+
+Table columns:
+- Animal ID
+- RFID
+- Breed
+- Confidence
+- Status
+- GPS
+- Last Update
+- Actions
+
+Provide:
+- empty state
+- loading state
+- error state
+- responsive mobile table/card layout
+
+4. ADD ANIMAL
+Professional form:
+- RFID UID
+- Breed
+- Confidence
+- Sex
+- Age
+- Owner
+- Village
+- District
+- State
+
+Show validation and success feedback.
+
+5. ANIMAL DETAILS
+Show clearly:
+
+Animal identity:
+- Animal ID
+- RFID UID
+- Breed
+- AI confidence
+- Sex
+- Age
+- Owner
+
+Location:
+- Latitude
+- Longitude
+- GPS fix
+- Satellites
+- Last GPS update
+
+AI:
+- latest image
+- predicted breed
+- confidence
+- top predictions
+- detection time
+
+Status:
+- online/offline
+- device
+- last seen
+
+Include:
+- animal profile
+- GPS map
+- tracking history
+- detection history
+- timeline/activity
+
+6. LIVE TRACKING
+Full-page interactive map.
+
+Show:
+- animal markers
+- selected animal details
+- breed
+- RFID
+- confidence
+- GPS status
+- satellites
+- last update
+
+Controls:
+- search animal
+- breed filter
+- status filter
+- zoom
+- fit all
+- selected animal
+
+Use realistic mock coordinates.
+Clearly label mock data during frontend-only phase.
+
+7. BREED DETECTION
+Professional AI detection page.
+
+Sections:
+- image upload/dropzone
+- image preview
+- animal/RFID selection
+- prediction result
+- predicted breed
+- confidence
+- top-3 predictions
+- model information
+
+Use simulated local prediction data ONLY for frontend visualization.
+Clearly structure the UI so it can later receive the real backend response.
+
+8. DETECTION HISTORY
+Show:
+- image
+- Animal ID
+- RFID
+- breed
+- confidence
+- date/time
+- model
+- location
+
+Features:
+- search
+- breed filter
+- confidence filter
+- date filter
+- pagination
+- details view
+
+9. DEVICES
+Show:
+- Device ID
+- Device type
+- name
+- IP
+- status
+- firmware
+- last seen
+
+Device types:
+- ESP32 DevKit
+- ESP32-CAM
+- Gateway
+- Other
+
+Use status indicators:
+Online
+Offline
+
+10. REPORTS
+Production-level report page.
+
+Show:
+- total animals
+- breed distribution
+- detection statistics
+- GPS coverage
+- device status
+- daily/weekly/monthly activity
+
+Provide:
+- date range selector
+- summary cards
+- charts
+- tables
+
+11. SETTINGS
+Sections:
+- profile
+- notification preferences
+- display preferences
+- system information
+
+12. 404 PAGE
+Professional not-found page with navigation back to dashboard.
+
+MOCK DATA
+
+Create centralized:
+src/data/mockData.js
+
+Include realistic:
+- animals
+- RFID values
+- 17 buffalo breeds
+- GPS positions
+- detections
+- devices
+- dashboard statistics
+- alerts
+- tracking history
+
+Do NOT scatter mock data across components.
+
+BREEDS
+Use exactly:
+
+banni
+bargur
+bhadwari
+Chhattisgarhi
+chilika
+gojri
+Jaffarabadi
+kalahandi
+luit
+marathwada
+mehsana
+murrah
+nagpuri
+nili-ravi
+pandharpuri
+surti
+toda
+
+COMPONENTS
+
+Create reusable components for:
+- Sidebar
+- Header
+- StatCard
+- DataTable
+- SearchBar
+- FilterPanel
+- StatusBadge
+- ConfidenceBadge
+- AnimalCard
+- AnimalTable
+- DetectionCard
+- GPSMap
+- EmptyState
+- LoadingState
+- ErrorState
+- Modal
+- ConfirmationDialog
+- Toast/notification
+- Breadcrumb
+- Pagination
+- ChartCard
+
+LAYOUT
+Desktop:
+- fixed/collapsible sidebar
+- top header
+- scrollable content
+
+Mobile:
+- collapsible sidebar
+- responsive cards
+- responsive tables
+- touch-friendly controls
+
+VISUAL QUALITY
+Use a consistent design system:
+- spacing scale
+- typography hierarchy
+- border radius
+- shadows
+- buttons
+- form controls
+- status colors
+- cards
+- tables
+
+Primary visual direction:
+professional green livestock/IoT theme with neutral backgrounds.
+
+Avoid excessive decoration.
+
+MAP
+Use Leaflet/React Leaflet.
+Use mock coordinates only during Phase 1.
+Do not hardcode real user location.
+
+IMAGES
+Use available local assets or safe placeholders for UI development.
+Build reusable image components.
+Handle missing images gracefully.
+
+STATE MANAGEMENT
+Use React Context only where appropriate.
+Create clean local state for page interactions.
+Avoid unnecessary global state libraries.
+
+ROUTING
+Implement all routes:
+/
+/login
+/dashboard
+/animals
+/animals/:animalId
+/animals/add
+/tracking
+/detections
+/devices
+/reports
+/settings
+/404
+
+Protected-route behavior may use mock authentication only for Phase 1.
+
+UX REQUIREMENTS
+Every interactive page must support:
+- loading
+- empty
+- error
+- success feedback
+
+Forms:
+- inline validation
+- clear labels
+- required indicators
+- accessible error messages
+
+Buttons:
+- disabled while processing
+- visible hover/focus states
+
+Tables:
+- readable
+- sortable
+- paginated
+- responsive
+
+DASHBOARD REALISM
+Use realistic sample values, for example:
+- animal counts
+- breed percentages
+- confidence percentages
+- online devices
+- GPS status
+- detection timestamps
+
+Do not claim sample values are real production measurements.
+
+CODE QUALITY
+- reusable components
+- clean imports
+- no duplicate UI code
+- no dead code
+- no unnecessary dependencies
+- no console errors
+- no TODO placeholders
+- no broken links
+- meaningful component names
+
+ACCESSIBILITY
+- semantic HTML
+- keyboard navigation
+- labels for forms
+- sufficient contrast
+- aria labels where appropriate
+- visible focus states
+
+FRONTEND-ONLY PHASE
+The UI must be completely functional with mock data.
+
+Examples:
+- search works
+- filters work
+- pagination works
+- navigation works
+- modals work
+- forms validate
+- mock login works
+- map works
+- charts render
+- detection workflow visually works
+- animal details work
+- responsive layouts work
+
+DO NOT IMPLEMENT YET
+- Axios backend calls
+- REST API calls
+- Socket.IO
+- MongoDB
+- JWT backend integration
+- ESP32 communication
+- real ONNX inference
+- real image prediction
+- backend authentication
+
+Prepare clean service/component boundaries so these can be integrated later without redesigning the UI.
+
+FINAL TEST
+Before declaring Phase 1 complete:
+
+1. npm run dev
+2. npm run build
+3. Inspect every page manually.
+4. Check every route.
+5. Check desktop layout.
+6. Check mobile layout.
+7. Check navigation.
+8. Check forms.
+9. Check tables.
+10. Check charts.
+11. Check map.
+12. Check modals/toasts.
+13. Check loading/empty/error states.
+14. Fix console errors.
+15. Fix build errors.
+16. Remove unused imports/code.
+
+IMPORTANT
+Do not integrate the backend after Phase 1.
+STOP after the complete frontend is built, polished and build-tested.
+
+FINAL REPORT
+Return only:
+- pages completed
+- components completed
+- build result
+- major UI features
+- remaining frontend-only issues

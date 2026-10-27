@@ -1,0 +1,582 @@
+PROJECT
+IoT Based Cattle Tracking and Breed Recognition System for National Livestock Management.
+
+GOAL
+Build the complete backend first using Node.js, Express, MongoDB, Mongoose and Socket.IO.
+Runtime must be JavaScript/Node.js only.
+Do NOT create a Python inference server.
+Do NOT create a Python ML service.
+Do NOT create an ml/scripts folder.
+
+PROJECT PATH
+C:\IOT\backend
+
+ML MODEL PATH
+C:\IOT\ml\models\best.pt
+
+ML RUNTIME
+Convert best.pt once to:
+C:\IOT\ml\models\best.onnx
+
+Keep best.pt unchanged.
+Runtime inference must use best.onnx with onnxruntime-node.
+
+MODEL DETAILS
+Task: YOLOv8 image classification
+Input size: 224x224
+Classes: 17
+
+Classes:
+banni
+bargur
+bhadwari
+Chhattisgarhi
+chilika
+gojri
+Jaffarabadi
+kalahandi
+luit
+marathwada
+mehsana
+murrah
+nagpuri
+nili-ravi
+pandharpuri
+surti
+toda
+
+IMPORTANT ML RULE
+If best.onnx does not exist:
+1. Detect the missing file.
+2. Do not fake predictions.
+3. Do not build a Python service.
+4. Use a one-time Ultralytics export from best.pt to ONNX.
+5. Final ML integration test is NOT considered passed until best.onnx loads and produces a real prediction.
+
+REQUIRED RUNTIME PACKAGES
+express
+mongoose
+cors
+dotenv
+socket.io
+multer
+sharp
+onnxruntime-node
+helmet
+express-rate-limit
+morgan
+bcryptjs
+jsonwebtoken
+
+DEVELOPMENT/TEST PACKAGES
+nodemon
+jest
+supertest
+mongodb-memory-server
+
+BACKEND STRUCTURE
+
+backend/
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── animalController.js
+│   │   ├── trackingController.js
+│   │   ├── detectionController.js
+│   │   ├── dashboardController.js
+│   │   └── deviceController.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   ├── errorHandler.js
+│   │   ├── notFound.js
+│   │   └── upload.js
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Animal.js
+│   │   ├── Tracking.js
+│   │   ├── Detection.js
+│   │   └── Device.js
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── animalRoutes.js
+│   │   ├── trackingRoutes.js
+│   │   ├── detectionRoutes.js
+│   │   ├── dashboardRoutes.js
+│   │   └── deviceRoutes.js
+│   ├── services/
+│   │   ├── mlService.js
+│   │   ├── animalService.js
+│   │   ├── trackingService.js
+│   │   ├── detectionService.js
+│   │   └── socketService.js
+│   ├── utils/
+│   │   ├── validation.js
+│   │   └── animalId.js
+│   ├── app.js
+│   └── server.js
+├── uploads/
+│   └── detections/
+├── tests/
+│   ├── health.test.js
+│   ├── animal.test.js
+│   ├── tracking.test.js
+│   ├── detection.test.js
+│   ├── dashboard.test.js
+│   ├── device.test.js
+│   └── ml.test.js
+├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+└── requirements.txt
+
+ML FILES
+C:\IOT\ml\models\best.pt
+C:\IOT\ml\models\best.onnx
+
+ENVIRONMENT
+
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/buffalo_tracking
+JWT_SECRET=change_me
+JWT_EXPIRES_IN=7d
+CORS_ORIGIN=http://localhost:5173
+ML_MODEL_PATH=C:\IOT\ml\models\best.onnx
+UPLOAD_DIR=uploads/detections
+NODE_ENV=development
+
+SERVER
+Create Express app and HTTP server.
+Attach Socket.IO to same HTTP server.
+Connect MongoDB before starting server.
+Serve /uploads statically.
+Use JSON middleware.
+Use CORS.
+Use helmet.
+Use rate limiting.
+Use morgan.
+Use centralized error handling.
+
+HEALTH
+GET /api/health
+
+Return:
+success
+message
+database status
+ML model status
+timestamp
+
+Example:
+{
+  "success": true,
+  "message": "Backend is running",
+  "database": "connected",
+  "mlModel": "loaded"
+}
+
+USER
+Fields:
+name
+email
+password
+role: admin | field_worker
+isActive
+timestamps
+
+Hash passwords with bcryptjs.
+Use JWT authentication.
+Never return password.
+
+AUTH
+POST /api/auth/register
+POST /api/auth/login
+GET /api/auth/me
+
+ANIMAL
+Fields:
+animalId
+rfidUid
+breed
+breedConfidence
+sex
+age
+ownerName
+village
+district
+state
+latitude
+longitude
+gpsFix
+satellites
+lastGpsUpdate
+latestImage
+latestDetectionId
+lastDetectionTime
+status
+timestamps
+
+animalId generation:
+RFID 21:39:05:6E
+=> BUF-21:39:05:6E
+
+RFID must be normalized to uppercase.
+
+ANIMAL APIs
+POST /api/animals
+GET /api/animals
+GET /api/animals/:animalId
+GET /api/animals/rfid/:rfidUid
+PUT /api/animals/:animalId
+PATCH /api/animals/:animalId/status
+DELETE /api/animals/:animalId
+
+Support pagination:
+page
+limit
+search
+breed
+status
+district
+
+TRACKING MODEL
+Fields:
+animalId
+rfidUid
+latitude
+longitude
+gpsFix
+satellites
+timestamp
+source
+deviceId
+
+TRACKING API
+POST /api/tracking/device-data
+GET /api/tracking/animal/:animalId
+GET /api/tracking/latest/:animalId
+GET /api/tracking
+
+ESP32 PAYLOAD
+{
+  "deviceId": "ESP32-DEVKIT-01",
+  "rfidUid": "21:39:05:6E",
+  "animalId": "BUF-21:39:05:6E",
+  "latitude": null,
+  "longitude": null,
+  "gpsFix": false,
+  "satellites": 0,
+  "timestamp": "ISO_DATE"
+}
+
+RULES
+RFID is required.
+gpsFix=false must be accepted.
+latitude/longitude may be null when gpsFix=false.
+gpsFix=true requires valid coordinates.
+Update animal's latest GPS fields.
+Create tracking history when valid GPS fix exists.
+Update device lastSeen.
+Emit Socket.IO event: tracking:updated.
+
+DETECTION MODEL
+Fields:
+animalId
+rfidUid
+breed
+confidence
+imageUrl
+imagePath
+modelName
+inferenceSource
+topPredictions
+processingTimeMs
+timestamp
+
+DETECTION
+POST /api/detections
+POST /api/detections/predict
+GET /api/detections
+GET /api/detections/:id
+GET /api/detections/animal/:animalId
+GET /api/detections/latest
+
+IMAGE PREDICTION
+POST /api/detections/predict
+Content-Type: multipart/form-data
+
+Fields:
+image
+rfidUid
+animalId
+
+Flow:
+1. Validate image.
+2. Save image.
+3. Preprocess image with sharp.
+4. Resize to 224x224.
+5. Convert to RGB.
+6. Normalize to model input.
+7. Load best.onnx once and reuse the ONNX session.
+8. Run inference with onnxruntime-node.
+9. Convert model output to class probabilities.
+10. Select highest probability.
+11. Return breed and confidence percentage.
+12. Return top-3 predictions.
+13. Save Detection document.
+14. Update Animal breed and breedConfidence.
+15. Update Animal latest image/detection/time.
+16. Emit detection:created.
+17. Return JSON.
+
+DO NOT use placeholder predictions.
+
+ML SERVICE
+Create src/services/mlService.js.
+
+Responsibilities:
+- Resolve ML_MODEL_PATH.
+- Verify best.onnx exists.
+- Load ONNX model once.
+- Expose getModelStatus().
+- Expose predict(imagePath).
+- Handle image preprocessing.
+- Handle tensor creation.
+- Run inference.
+- Map output index to the 17 breed names.
+- Return:
+{
+  "breed": "murrah",
+  "confidence": 94.2,
+  "topPredictions": [
+    {"breed":"murrah","confidence":94.2},
+    {"breed":"mehsana","confidence":3.1},
+    {"breed":"surti","confidence":1.2}
+  ]
+}
+
+MODEL STATUS
+The application must fail clearly if best.onnx cannot be loaded.
+Do not silently fall back to fake data.
+
+IMAGE UPLOAD
+Allowed:
+jpg
+jpeg
+png
+webp
+
+Use multer.
+Use reasonable file-size limit.
+Store under uploads/detections.
+Use unique filenames.
+Serve uploads statically.
+
+DEVICE MODEL
+Fields:
+deviceId
+deviceType
+name
+ipAddress
+firmwareVersion
+status
+lastSeen
+metadata
+timestamps
+
+DEVICE APIs
+POST /api/devices/register
+POST /api/devices/heartbeat
+GET /api/devices
+GET /api/devices/:deviceId
+
+ESP32 device heartbeat must update lastSeen and status.
+
+DASHBOARD
+GET /api/dashboard/summary
+GET /api/dashboard/breeds
+GET /api/dashboard/recent
+GET /api/dashboard/live
+
+Summary fields:
+totalAnimals
+onlineAnimals
+offlineAnimals
+gpsFixedAnimals
+totalDetections
+todayDetections
+
+SOCKET.IO
+Events:
+tracking:updated
+detection:created
+animal:updated
+device:online
+device:offline
+dashboard:updated
+
+When tracking data arrives:
+broadcast tracking:updated.
+
+When AI prediction is saved:
+broadcast detection:created.
+
+VALIDATION
+RFID:
+required
+trim
+uppercase
+non-empty
+
+Latitude:
+-90 to 90
+
+Longitude:
+-180 to 180
+
+Satellites:
+integer >= 0
+
+Confidence:
+0 to 100
+
+Email:
+valid email
+
+Password:
+minimum 6 characters
+
+API RESPONSE
+
+Success:
+{
+  "success": true,
+  "message": "...",
+  "data": {}
+}
+
+Error:
+{
+  "success": false,
+  "message": "...",
+  "error": "ERROR_CODE"
+}
+
+SECURITY
+Use helmet.
+Use CORS from env.
+Use rate limiting.
+Use JWT on protected routes.
+Hash passwords.
+Never expose secrets.
+Never return password.
+Do not log JWT secret, passwords or MongoDB credentials.
+
+DATABASE
+Use Mongoose.
+Add indexes for:
+Animal: animalId, rfidUid, breed, status
+Tracking: animalId, rfidUid, timestamp
+Detection: animalId, rfidUid, timestamp, breed
+Device: deviceId
+
+TESTING REQUIREMENT
+Create Jest + Supertest tests.
+
+Test all backend modules/routes and important failure cases.
+
+Required tests:
+1. MongoDB connection.
+2. Server startup.
+3. GET /api/health.
+4. Register user.
+5. Login.
+6. JWT-protected endpoint.
+7. Create animal.
+8. Find animal by RFID.
+9. Update animal.
+10. Device registration.
+11. Device heartbeat.
+12. ESP32 tracking payload with GPS fix=false.
+13. ESP32 tracking payload with valid GPS.
+14. Tracking history retrieval.
+15. Image upload validation.
+16. ML model existence check.
+17. ML model loading.
+18. Real ML inference using a real test image.
+19. Prediction returns one of the 17 breed names.
+20. Prediction confidence is 0-100.
+21. Detection saved to MongoDB.
+22. Animal breed updated after prediction.
+23. Dashboard summary.
+24. Dashboard breed distribution.
+25. Socket.IO tracking event.
+26. Socket.IO detection event.
+27. Invalid RFID rejected.
+28. Invalid latitude rejected.
+29. Invalid longitude rejected.
+30. Invalid confidence rejected.
+31. Missing image rejected.
+32. Unsupported image rejected.
+33. Missing ML model handled clearly.
+34. MongoDB/API errors handled.
+
+TEST DATABASE
+Prefer mongodb-memory-server for automated tests so tests do not destroy development data.
+Tests must clean up after execution.
+
+NPM SCRIPTS
+Add:
+dev
+start
+test
+test:watch
+test:coverage
+
+ML END-TO-END TEST
+Do not declare backend complete until:
+1. best.onnx exists.
+2. Node successfully loads best.onnx.
+3. A real buffalo image is sent to /api/detections/predict.
+4. Real breed prediction is returned.
+5. Confidence is returned.
+6. Detection is stored in MongoDB.
+7. Animal record is updated.
+8. Socket.IO detection event is emitted.
+9. API response is correct.
+
+FINAL FULL TEST
+After all files are generated:
+1. Run npm install.
+2. Run all automated tests.
+3. Start MongoDB.
+4. Start backend.
+5. Test /api/health.
+6. Test auth.
+7. Test animal CRUD.
+8. Test RFID/GPS ingestion.
+9. Test detection upload.
+10. Test real ONNX inference.
+11. Test MongoDB persistence.
+12. Test Socket.IO.
+13. Test dashboard APIs.
+14. Test error handling.
+15. Check every created JS file for syntax/import errors.
+16. Check every route is mounted.
+17. Check every controller/service/model is actually used.
+18. Remove unused imports and dead code.
+19. Do not leave TODO placeholders or fake ML logic.
+20. Report exact test results and any failures.
+
+IMPORTANT
+Do not build React frontend yet.
+Do not create a Python inference server.
+Do not create Python backend files.
+Do not create fake AI predictions.
+Do not change best.pt.
+Do not put best.pt inside src.
+Keep ML artifacts in C:\IOT\ml\models.
+Use best.onnx for Node runtime inference.
+Build the backend completely and test it end-to-end before frontend work.
